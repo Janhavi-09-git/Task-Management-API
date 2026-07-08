@@ -1,0 +1,207 @@
+{
+	"info": {
+		"_postman_id": "7a35e85c-897c-4ab4-8fb3-3ef2b1d62c2f",
+		"name": "Task Management REST API",
+		"description": "CRUD API endpoints for managing tasks with database storage, input validation, and global error handling.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get All Tasks",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/tasks",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"tasks"
+					]
+				},
+				"description": "Retrieves the list of all tasks from SQLite. Supports sorting by due_date automatically."
+			},
+			"response": []
+		},
+		{
+			"name": "Get Tasks with Filter (Status = In Progress)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/tasks?status=In Progress",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"tasks"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "In Progress",
+							"description": "Filter tasks by status"
+						}
+					]
+				},
+				"description": "Filters the task collection to only display items that are currently in progress."
+			},
+			"response": []
+		},
+		{
+			"name": "Get Single Task by ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/tasks/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"tasks",
+						"1"
+					]
+				},
+				"description": "Gets full details for task #1. Returns 404 if the task ID does not exist."
+			},
+			"response": []
+		},
+		{
+			"name": "Create Task (Valid Payload)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Implement Unit Tests\",\n    \"description\": \"Write endpoint test suites using unittest and WebTest client.\",\n    \"status\": \"Todo\",\n    \"priority\": \"High\",\n    \"due_date\": \"2026-07-02\",\n    \"tags\": [\"testing\", \"quality\"]\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/tasks",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"tasks"
+					]
+				},
+				"description": "Creates a new task. The payload is validated against Marshmallow schema rules before insertion."
+			},
+			"response": []
+		},
+		{
+			"name": "Create Task (Invalid Payload - Validation Test)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"A\",\n    \"status\": \"UnknownStatus\",\n    \"priority\": \"Critical\",\n    \"due_date\": \"02-07-2026\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/tasks",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"tasks"
+					]
+				},
+				"description": "Expects 422 Unprocessable Entity. Tests validation rules:\n1. Title too short (min=3)\n2. Invalid Status option\n3. Invalid Priority option\n4. Invalid Date Format (must be YYYY-MM-DD)"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Task Status / Details",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"status\": \"In Progress\",\n    \"priority\": \"High\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/tasks/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"tasks",
+						"1"
+					]
+				},
+				"description": "Performs a partial update (PATCH/PUT style) on an existing task. Fields omitted from the payload will remain unchanged."
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Task",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/tasks/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"tasks",
+						"1"
+					]
+				},
+				"description": "Deletes task #1 from the database. Returns 200 with confirmation message."
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://127.0.0.1:5000",
+			"type": "string"
+		}
+	]
+}

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taskflow REST API | CRUD Kanban Dashboard</title>
+    <!-- Google Fonts: Outfit & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-wrapper">
+        <!-- Background Blurs -->
+        <div class="ambient-glow bg-blue"></div>
+        <div class="ambient-glow bg-purple"></div>
+
+        <!-- App Header -->
+        <header class="app-header">
+            <div class="brand">
+                <div class="logo-box">
+                    <i class="fa-solid fa-square-poll-horizontal"></i>
+                </div>
+                <div>
+                    <h1>Taskflow<span>API</span></h1>
+                    <p class="subtitle">RESTful CRUD Management Dashboard</p>
+                </div>
+            </div>
+
+            <!-- Filters & Actions -->
+            <div class="header-controls">
+                <div class="filter-group">
+                    <label for="priorityFilter"><i class="fa-solid fa-filter"></i> Priority:</label>
+                    <select id="priorityFilter">
+                        <option value="">All Priorities</option>
+                        <option value="High">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low">Low</option>
+                    </select>
+                </div>
+
+                <button id="openCreateModalBtn" class="btn btn-primary">
+                    <i class="fa-solid fa-plus"></i> New Task
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Kanban Board -->
+        <main class="kanban-board">
+            <!-- Column 1: Todo -->
+            <div class="kanban-column" id="column-Todo" data-status="Todo">
+                <div class="column-header">
+                    <div class="col-title">
+                        <span class="col-dot todo-dot"></span>
+                        <h2>To Do</h2>
+                    </div>
+                    <span class="column-count" id="count-Todo">0</span>
+                </div>
+                <div class="cards-container" id="cards-Todo">
+                    <!-- Cards will be dynamically injected here -->
+                </div>
+            </div>
+
+            <!-- Column 2: In Progress -->
+            <div class="kanban-column" id="column-In-Progress" data-status="In Progress">
+                <div class="column-header">
+                    <div class="col-title">
+                        <span class="col-dot progress-dot"></span>
+                        <h2>In Progress</h2>
+                    </div>
+                    <span class="column-count" id="count-In-Progress">0</span>
+                </div>
+                <div class="cards-container" id="cards-In-Progress">
+                    <!-- Cards will be dynamically injected here -->
+                </div>
+            </div>
+
+            <!-- Column 3: Done -->
+            <div class="kanban-column" id="column-Done" data-status="Done">
+                <div class="column-header">
+                    <div class="col-title">
+                        <span class="col-dot done-dot"></span>
+                        <h2>Completed</h2>
+                    </div>
+                    <span class="column-count" id="count-Done">0</span>
+                </div>
+                <div class="cards-container" id="cards-Done">
+                    <!-- Cards will be dynamically injected here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ==========================================================================
+       CREATE / EDIT TASK MODAL
+       ========================================================================== -->
+    <div class="modal-overlay" id="taskModal">
+        <div class="modal-card">
+            <header class="modal-header">
+                <h3 id="modalTitle">Create New Task</h3>
+                <button class="close-modal" id="closeModalBtn">&times;</button>
+            </header>
+            
+            <form id="taskForm">
+                <input type="hidden" id="taskIdField">
+                
+                <div class="form-group">
+                    <label for="titleField">Task Title *</label>
+                    <input type="text" id="titleField" placeholder="e.g. Implement OAuth Flow" required>
+                    <span class="validation-error" id="titleError"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="descField">Description</label>
+                    <textarea id="descField" rows="3" placeholder="Briefly describe what needs to be done..."></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="statusField">Status</label>
+                        <select id="statusField">
+                            <option value="Todo">To Do</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Done">Completed</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="priorityField">Priority</label>
+                        <select id="priorityField">
+                            <option value="Low">Low</option>
+                            <option value="Medium" selected>Medium</option>
+                            <option value="High">High</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dueDateField">Due Date</label>
+                        <input type="date" id="dueDateField">
+                        <span class="validation-error" id="dateError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tagsField">Tags (comma separated)</label>
+                        <input type="text" id="tagsField" placeholder="e.g. frontend, bug, api">
+                    </div>
+                </div>
+
+                <footer class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancelModalBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="saveTaskBtn">Save Task</button>
+                </footer>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script File -->
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,546 @@
+/* ==========================================================================
+   DESIGN VARIABLES
+   ========================================================================== */
+:root {
+    --bg-dark: #07080e;
+    --bg-column: rgba(16, 18, 30, 0.6);
+    --bg-card: rgba(26, 29, 49, 0.85);
+    --bg-input: rgba(14, 16, 28, 0.9);
+    
+    --border-subtle: rgba(255, 255, 255, 0.06);
+    --border-active: rgba(124, 77, 255, 0.4);
+    
+    --primary: #6366f1;
+    --primary-glow: rgba(99, 102, 241, 0.3);
+    
+    --priority-high: #ff4a5a;
+    --priority-high-bg: rgba(255, 74, 90, 0.12);
+    --priority-medium: #ff9f43;
+    --priority-medium-bg: rgba(255, 159, 67, 0.12);
+    --priority-low: #00d2d3;
+    --priority-low-bg: rgba(0, 210, 211, 0.12);
+    
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    
+    --font-heading: 'Outfit', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    
+    --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    --radius-lg: 16px;
+    --radius-md: 12px;
+    --radius-sm: 8px;
+}
+
+/* ==========================================================================
+   BASE STYLES & RESET
+   ========================================================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Ambient glow blobs */
+.ambient-glow {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    filter: blur(140px);
+    opacity: 0.15;
+    z-index: -1;
+}
+.bg-blue {
+    background: #3b82f6;
+    top: -100px;
+    left: -100px;
+}
+.bg-purple {
+    background: #a855f7;
+    bottom: -150px;
+    right: -100px;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* ==========================================================================
+   APP HEADER
+   ========================================================================== */
+.app-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 24px;
+}
+
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.logo-box {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--primary) 0%, #4f46e5 100%);
+    border-radius: var(--radius-md);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    color: white;
+    box-shadow: 0 8px 24px var(--primary-glow);
+}
+.brand h1 {
+    font-family: var(--font-heading);
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+.brand h1 span {
+    color: var(--primary);
+}
+.brand .subtitle {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-subtle);
+    padding: 8px 16px;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+.filter-group select {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-weight: 500;
+    outline: none;
+    cursor: pointer;
+}
+.filter-group select option {
+    background-color: #0e101f;
+    color: var(--text-primary);
+}
+
+/* ==========================================================================
+   BUTTONS
+   ========================================================================== */
+.btn {
+    border: none;
+    padding: 10px 20px;
+    border-radius: var(--radius-md);
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: var(--transition);
+}
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary) 0%, #4f46e5 100%);
+    color: white;
+    box-shadow: 0 4px 14px var(--primary-glow);
+}
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+}
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    border: 1px solid var(--border-subtle);
+}
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.09);
+    transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   KANBAN BOARD STRUCTURE
+   ========================================================================== */
+.kanban-board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    align-items: start;
+}
+
+.kanban-column {
+    background: var(--bg-column);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: flex;
+    flex-direction: column;
+    min-height: 600px;
+    transition: var(--transition);
+}
+.kanban-column.drag-over {
+    border-color: var(--border-active);
+    background: rgba(16, 18, 30, 0.9);
+}
+
+.column-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.col-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.col-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+.todo-dot { background-color: var(--text-secondary); }
+.progress-dot { background-color: var(--priority-medium); }
+.done-dot { background-color: var(--priority-low); }
+
+.col-title h2 {
+    font-family: var(--font-heading);
+    font-size: 18px;
+    font-weight: 700;
+}
+.column-count {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-subtle);
+}
+
+.cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
+}
+
+/* ==========================================================================
+   KANBAN CARD COMPONENT
+   ========================================================================== */
+.task-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 18px;
+    cursor: grab;
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    user-select: none;
+}
+.task-card:active {
+    cursor: grabbing;
+}
+.task-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Glow highlights by Priority */
+.task-card.priority-High {
+    box-shadow: 0 4px 20px rgba(255, 74, 90, 0.05);
+    border-left: 4px solid var(--priority-high);
+}
+.task-card.priority-Medium {
+    box-shadow: 0 4px 20px rgba(255, 159, 67, 0.05);
+    border-left: 4px solid var(--priority-medium);
+}
+.task-card.priority-Low {
+    box-shadow: 0 4px 20px rgba(0, 210, 211, 0.05);
+    border-left: 4px solid var(--priority-low);
+}
+
+/* Dragging visual opacity state */
+.task-card.dragging {
+    opacity: 0.4;
+    border: 2px dashed var(--primary);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+.card-header h3 {
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+.priority-badge {
+    font-size: 10px;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 3px 8px;
+    border-radius: 20px;
+}
+.prio-High { background: var(--priority-high-bg); color: var(--priority-high); }
+.prio-Medium { background: var(--priority-medium-bg); color: var(--priority-medium); }
+.prio-Low { background: var(--priority-low-bg); color: var(--priority-low); }
+
+.card-body {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 14px;
+}
+
+.card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    padding-top: 12px;
+}
+
+.due-date {
+    font-size: 11px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.due-date i {
+    font-size: 12px;
+}
+.due-date.overdue {
+    color: var(--priority-high);
+}
+
+.card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+.tag-chip {
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-subtle);
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.card-actions {
+    display: flex;
+    gap: 8px;
+}
+.action-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 12px;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: var(--transition);
+}
+.action-btn:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.06);
+}
+.action-btn.btn-delete:hover {
+    color: var(--priority-high);
+    background: rgba(255, 74, 90, 0.08);
+}
+
+/* ==========================================================================
+   MODAL DIALOG COMPONENT
+   ========================================================================== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(4, 5, 10, 0.8);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-card {
+    background: #0f111a;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 520px;
+    padding: 28px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+    transform: scale(0.95);
+    transition: transform 0.3s ease;
+}
+.modal-overlay.active .modal-card {
+    transform: scale(1);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+.modal-header h3 {
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 700;
+}
+.close-modal {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 24px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+.close-modal:hover {
+    color: var(--text-primary);
+}
+
+/* Form Styles */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.form-group label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary);
+}
+
+.form-group input, 
+.form-group select, 
+.form-group textarea {
+    background: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    padding: 12px 14px;
+    border-radius: var(--radius-md);
+    font-family: var(--font-body);
+    font-size: 14px;
+    outline: none;
+    transition: var(--transition);
+}
+.form-group input:focus, 
+.form-group select:focus, 
+.form-group textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 8px rgba(99, 102, 241, 0.2);
+}
+
+.validation-error {
+    font-size: 11px;
+    color: var(--priority-high);
+    display: none;
+    margin-top: 4px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 28px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 20px;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN
+   ========================================================================== */
+@media (max-width: 900px) {
+    .kanban-board {
+        grid-template-columns: 1fr;
+    }
+    .kanban-column {
+        min-height: auto;
+    }
+    .app-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .header-controls {
+        width: 100%;
+        justify-content: space-between;
+    }
+}
