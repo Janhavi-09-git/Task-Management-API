@@ -1,7 +1,5 @@
 // Base URL of Flask REST API (defaults to local port 5000)
-const API_URL = window.location.origin.includes('localhost') || window.location.origin.includes('127.0.0.1')
-    ? window.location.origin
-    : 'http://127.0.0.1:5000';
+const API_URL = "http://127.0.0.1:5000";
 
 // DOM Selectors
 const boardTodo = document.getElementById('cards-Todo');
@@ -279,9 +277,10 @@ async function handleFormSubmit(e) {
                 alert(`Error: ${errResult.message || 'Operation failed'}`);
             }
         }
-    } catch (error) {
-        console.error('Error processing form submit:', error);
-    }
+    } catch(error){
+    console.error(error);
+    alert(error.message);
+}
 }
 
 // Delete Task

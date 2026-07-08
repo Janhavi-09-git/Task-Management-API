@@ -77,4 +77,10 @@ def seed_initial_data():
     for task in tasks:
         db.session.add(task)
     db.session.commit()
+    try:
+        db.session.add(new_task)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+    return jsonify({"error": str(e)}),500
     print("Database pre-populated with seed task items.")

@@ -1,3 +1,4 @@
+
 import os
 from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS
@@ -12,7 +13,7 @@ app = Flask(__name__)
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(BASE_DIR, 'tasks.db')}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'dev-secret-key-12345'
+app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 
 # Enable CORS for cross-origin API invocation
 CORS(app)
@@ -82,11 +83,11 @@ def get_tasks():
     # Apply filters from query params
     status_filter = request.args.get('status')
     if status_filter:
-        query = query.filter(Task.status.iexact(status_filter))
+        query = query.filter(Task.status == status_filter)
 
     priority_filter = request.args.get('priority')
     if priority_filter:
-        query = query.filter(Task.priority.iexact(priority_filter))
+        query = query.filter(Task.priority == priority_filter)
 
     # Order tasks by due date (nulls last)
     tasks = query.order_by(Task.due_date.asc()).all()
